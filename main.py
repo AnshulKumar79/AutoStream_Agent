@@ -1,6 +1,5 @@
 #MAIN_CHAT_INTERFACE
 
-
 from agent import agent_app
 from langchain_core.messages import HumanMessage
 
