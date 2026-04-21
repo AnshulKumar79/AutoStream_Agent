@@ -32,7 +32,7 @@ This repository contains the source code for the "Social-to-Lead Agentic Workflo
 # NOTE: Successfully captured leads will automatically be saved to a 'leads.csv' file in the root directory, which is git-ignored for data privacy.
 
 ## LLM SELECTION:
-The assignment document requested the use of Gemini 1.5 Flash. However, since Google has recently deprecated the standard 1.5 API endpoints (resulting in a 404 Not Found error on the default string), I proactively upgraded the model to **gemini-2.5-flash**. This ensures the application runs flawlessly and utilizes the currently supported and active Google AI infrastructure.
+The assignment document requested the use of Gemini 1.5 Flash. However, since Google has recently deprecated the standard 1.5 API endpoints (resulting in a 404 Not Found error on the default string), I proactively upgraded the model to **gemini-2.5-flash-lite**. This ensures the application runs flawlessly and utilizes the currently supported and active Google AI infrastructure.
 
 
 
