@@ -44,7 +44,7 @@ Your workflow:
 
 
 #Initializing the Gemini LLM and binding the required tool.
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
 tools_list = [mock_lead_capture]
 llm_with_tools = llm.bind_tools(tools_list)
 
