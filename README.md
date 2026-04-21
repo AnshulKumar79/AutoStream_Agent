@@ -6,7 +6,7 @@ This repository contains the source code for the "Social-to-Lead Agentic Workflo
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-github-repo-url>
+   git clone <github-repo-url>
    cd AutoStream_Agent
 
 2. **Set up a Virtual Environment:**
