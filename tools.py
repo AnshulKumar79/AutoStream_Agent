@@ -1,3 +1,5 @@
+import csv
+import os
 from langchain_core.tools import tool
 
 @tool
@@ -13,5 +15,22 @@ def mock_lead_capture(name: str, email: str, platform: str) -> str:
     print(f"Email: {email}")
     print(f"Platform: {platform}")
     print("="*55 + "\n")
+
+
+
+    #for saving the captured leads in a local CSV file.
+    file_name = "leads.csv"
+    file_exists = os.path.isfile(file_name)
     
-    return "Tool executed successfully. Thank the user and politely end the conversation."
+
+    with open(file_name, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        
+        #Writing the header row if the file is being created for the first time.
+        if not file_exists:
+            writer.writerow(['Name', 'Email', 'Platform'])
+            
+        #Saving the lead information.
+        writer.writerow([name, email, platform])
+    
+    return "Tool executed successfully. Data saved to CSV. Thank the user and politely end the conversation."
