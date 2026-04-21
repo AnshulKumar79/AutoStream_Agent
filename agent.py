@@ -10,15 +10,20 @@ from langgraph.checkpoint.memory import MemorySaver
 from state import AgentState
 from tools import mock_lead_capture
 
-#Loading the API key 
+
+
+
+#Loading the API key.
 load_dotenv()
 
-#Loading the knowledge base from the JSON file and converting it to a string for the system prompt
+
+#Loading the knowledge base from the JSON file and converting it to a string for the system prompt.
 with open("knowledge_base.json", "r") as f:
     kb_data = json.load(f)
     kb_string = json.dumps(kb_data, indent=2)
 
-#System Prompt(giving instructions to the agent and providing the knowledge base)
+#prompt_engineering.
+#System Prompt(giving instructions to the agent and providing the knowledge base).
 SYSTEM_PROMPT = f"""You are a helpful AI sales agent for AutoStream.
 AutoStream provides automated video editing tools for content creators.
 
@@ -35,12 +40,17 @@ Your workflow:
 4. Do NOT call the mock_lead_capture tool until you have collected ALL THREE details. Ask for missing details conversationally.
 """
 
-#Initializing the Gemini LLM and binding the required tool
+
+
+
+#Initializing the Gemini LLM and binding the required tool.
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
 tools_list = [mock_lead_capture]
 llm_with_tools = llm.bind_tools(tools_list)
 
-#Chatbot Node function
+
+
+#Chatbot Node function.
 def chatbot(state: AgentState):
     messages = state["messages"]
     #Ensuring that the System Prompt is always the first message
@@ -50,20 +60,27 @@ def chatbot(state: AgentState):
     response = llm_with_tools.invoke(messages)
     return {"messages": [response]}
 
-# Build the LangGraph
+
+
+#Building the LangGraph.
 graph_builder = StateGraph(AgentState)
 
-# Add Nodes (kam karne wale steps)
+#Adding nodes to the graph structure.
 graph_builder.add_node("chatbot", chatbot)
+
 tool_node = ToolNode(tools=tools_list)
 graph_builder.add_node("tools", tool_node)
 
-# Add Edges (flow kaise chalega)
+
+
+#Adding the edges and conditional edges to the graph structure(defining the flow).
 graph_builder.add_edge(START, "chatbot")
-# tools_condition automatically check karta hai ki LLM ne tool use karne ko kaha hai ya nahi
+#Checking the tools_condition after every response from the chatbot to see if the agent should call the tool or not based on the user's intent and the information collected so far.
 graph_builder.add_conditional_edges("chatbot", tools_condition)
 graph_builder.add_edge("tools", "chatbot")
 
-# Compile Graph with Memory Saver (yeh 5-6 turns tak chat yaad rakhega)
+
+
+#Compiling the graph with memory-saver(checkpointer) to save around 5-6 conversations.
 memory = MemorySaver()
 agent_app = graph_builder.compile(checkpointer=memory)
